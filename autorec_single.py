@@ -1,6 +1,7 @@
 import argparse
 import subprocess
 import os
+import time
 
 def run_nmap_scan(target_ip, scan_type):
     nmap_output_dir = "Nmap"
@@ -43,7 +44,13 @@ def run_virtual_host_scan(target_ip):
     return virtual_host_output
 
 def generate_report(nmap_output_file, gobuster_http_output_file, gobuster_https_output_file, virtual_host_output):
-    with open("Results/report.txt", "w") as report_file:
+    report_dir = "Results"
+    os.makedirs(report_dir, exist_ok=True)
+
+    timestamp = time.strftime("%Y%m%d-%H%M%S")
+    report_filename = f"report-{timestamp}.txt"
+
+    with open(f"{report_dir}/{report_filename}", "w") as report_file:
         if nmap_output_file:
             with open(nmap_output_file, "r") as nmap_file:
                 report_file.write("=== Nmap Scan Results ===\n")
